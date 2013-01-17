@@ -1,4 +1,4 @@
-puppet-ganglia
-==============
+puppet-murmur
+================
 
-a module to configure ganglia
+A Linux Murmur server module

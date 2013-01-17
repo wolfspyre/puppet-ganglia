@@ -1,0 +1,18 @@
+murmur
+
+This is the murmur module.
+  Mumble is a voice chat application for groups. While it can be used for any kind of activity, it is primarily intended for gaming. It can be compared to programs like Ventrilo or TeamSpeak. People tend to simplify things, so when they talk about Mumble they either talk about "Mumble" the client application or about "Mumble & Murmur" the whole voice chat application suite.
+-------
+License:
+GPL v2
+
+Contact
+-------
+Mumble/Murmur: http://mumble.sourceforge.net/Contributing
+
+Puppet Module: Wolf Noble wolfspyre@wolfspaw.com
+
+Support
+-------
+
+Please log tickets and issues at our [Projects site](https://github.com/wolfspyre/puppet-murmur/issues)
