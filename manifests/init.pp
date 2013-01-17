@@ -10,6 +10,11 @@
 # [*ganglia::add_repo*]
 #
 #
+# [*ganglia::gmetad*]
+#
+# [*ganglia::gmond*]
+#
+#
 # [*ganglia::gmond_cluster_name*]
 #   The name of the cluster this node is a member of
 #
@@ -49,11 +54,13 @@
 #
 # example hiera variable
 #
-#ganglia::add_repo: 'false'
-#ganglia::gmond_cluster_name: 'CLUSTERNAME'
-#ganglia::gmond_latlong: 'unspecified'
-#ganglia::gmond_location: 'ANYTOWN,USA'
-#ganglia::gmond_owner: 'CLUSTER CONTACT PERSON'
+#ganglia::add_repo:           'false'
+#ganglia::gmetad:             'false'
+#ganglia::gmond:              'true'
+#ganglia::gmond_cluster_name: 'unspecified'
+#ganglia::gmond_latlong:      'unspecified'
+#ganglia::gmond_location:     'unspecified'
+#ganglia::gmond_owner:        'unspecified'
 #ganglia::gmond_tcp_accept_channels:
 # main: {
 #   port:       '8649'
@@ -70,6 +77,7 @@
 #   port:       '8649'
 #   ttl:        '1'
 # }
+#ganglia::gmond_url:          'unspecified'
 #ganglia::repo_hash:
 #  ganglia_34: {
 #    descr: 'ganglia_34',
@@ -77,9 +85,9 @@
 #    gpgcheck: '0',
 #    enabled: '1'
 #  }
-#ganglia::user: 'nobody'
-#ganglia::version: '3.4'
-#ganglia::web: False
+#ganglia::user:               'nobody'
+#ganglia::version:            '3.4'
+#ganglia::web:                'false'
 
 #
 # === Examples
@@ -99,12 +107,14 @@
 #
 #
 class ganglia(
-  ganglia::add_repo                  = hiera('ganglia::add_repo', 'false' ),
-  ganglia::gmond_cluster_name        = hiera('ganglia::gmond_cluster_name', 'CLUSTERNAME' ),
-  ganglia::gmond_latlong             = hiera('ganglia::gmond_latlong', 'unspecified' ),
-  ganglia::gmond_location            = hiera('ganglia::gmond_location', 'ANYTOWN,USA' ),
-  ganglia::gmond_owner               = hiera('ganglia::gmond_owner', 'CLUSTER CONTACT PERSON' ),
-  ganglia::gmond_tcp_accept_channels = hiera('ganglia::gmond_tcp_accept_channels'.
+  ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' ),
+  ganglia::gmetad                    = hiera('ganglia::gmetad',             'false' ),
+  ganglia::gmond                     = hiera('ganglia::gmond',              'true' ),
+  ganglia::gmond_cluster_name        = hiera('ganglia::gmond_cluster_name', 'unspecified' ),
+  ganglia::gmond_latlong             = hiera('ganglia::gmond_latlong',      'unspecified' ),
+  ganglia::gmond_location            = hiera('ganglia::gmond_location',     'unspecified' ),
+  ganglia::gmond_owner               = hiera('ganglia::gmond_owner',        'unspecified' ),
+  ganglia::gmond_tcp_accept_channels = hiera('ganglia::gmond_tcp_accept_channels',
     main => {
       port => '8649',
     }),
@@ -120,6 +130,7 @@ class ganglia(
       port       => '8649',
       ttl        => '1',
     } ),
+  ganglia::gmond_url                 = hiera('ganglia::gmond_url',          'www.mydomain.com')
   ganglia::repo_hash                 = hiera('ganglia::repo_hash',
     ganglia_34 => {
       descr     => 'ganglia_34',
@@ -127,9 +138,9 @@ class ganglia(
       gpgcheck  => '0',
       enabled   => '1',
     }),
-  ganglia::user                      = hiera('ganglia::user', 'nobody' ),
-  ganglia::version                   = hiera('ganglia::version', '3.4'),
-  ganglia::web                       = hiera('ganglia::web', false )
+  ganglia::user                      = hiera('ganglia::user',               'nobody' ),
+  ganglia::version                   = hiera('ganglia::version',            '3.4'),
+  ganglia::web                       = hiera('ganglia::web',                'false' )
 ) {
   #take advantage of the Anchor pattern
   anchor{'ganglia::begin':}
@@ -141,31 +152,41 @@ class ganglia(
   -> anchor {'ganglia::service::end':}
   -> anchor {'ganglia::end':}
   #clean up our parameters
-$add_repo                  = $ganglia::add_repo
-$gmond_cluster_name        = $ganglia::gmond_cluster_name
-$gmond_latlong             = $ganglia::gmond_latlong
-$gmond_location            = $ganglia::gmond_location
-$gmond_owner               = $ganglia::gmond_owner
-$gmond_tcp_accept_channels = $ganglia::gmond_tcp_accept_channels
-$gmond_udp_recv_channels   = $ganglia::gmond_udp_recv_channels
-$gmond_udp_send_channels   = $ganglia::gmond_udp_send_channels
-$repo_hash                 = $ganglia::repo_hash
-$user                      = $ganglia::user
-$version                   = $ganglia::version
-$web                       = $ganglia::web
-
-  case $::osfamily {
-    #RedHat Debian Suse Solaris Windows
-    RedHat: {
-      include ganglia::rhel::package
-      include ganglia::rhel::config
-      include ganglia::rhel::service
-    }#end RHEL variant case
-    default: {
-      notice "There is not currently a ganglia module for $::osfamily"
-    }#end default unsupported OS case
+  if is_string($ganglia::add_repo) {
+    $add_repo = str2bool($ganglia::add_repo)
+  } else {
+    $add_repo = $ganglia::add_repo
   }
+  if is_string($ganglia::gmetad) {
+    $gmetad = str2bool($ganglia::gmetad)
+  } else {
+    $gmetad = $ganglia::gmetad
+  }
+  if is_string($ganglia::gmond) {
+    $gmond = str2bool($ganglia::gmond)
+  } else {
+    $gmond = $ganglia::gmond
+  }
+  if is_string($ganglia::web) {
+    $web = str2bool($ganglia::web)
+  } else {
+    $web = $ganglia::web
+  }
+  $gmond_cluster_name        = $ganglia::gmond_cluster_name
+  $gmond_latlong             = $ganglia::gmond_latlong
+  $gmond_location            = $ganglia::gmond_location
+  $gmond_owner               = $ganglia::gmond_owner
+  $gmond_tcp_accept_channels = $ganglia::gmond_tcp_accept_channels
+  $gmond_udp_recv_channels   = $ganglia::gmond_udp_recv_channels
+  $gmond_udp_send_channels   = $ganglia::gmond_udp_send_channels
+  $gmond_url                 = $ganglia::gmond_url
+  $repo_hash                 = $ganglia::repo_hash
+  $user                      = $ganglia::user
+  $version                   = $ganglia::version
+
 }#end of ganglia class
+
+
 
 
 

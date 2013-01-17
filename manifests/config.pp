@@ -1,23 +1,30 @@
-# == Class: ganglia::rhel::config
+# == Class: ganglia::config
 #  wrapper class
 #
 #
-Anchor['ganglia::package::end'] -> Class['ganglia::rhel::config']
-class ganglia::rhel::config {
+Anchor['gangliapackage::end'] -> Class['ganglia::config']
+class ganglia::config {
   #make our parameters local scope
   File{} -> Anchor['ganglia::config::end']
   #clean up our parameters
   $ensure             = $ganglia::ensure
-  case $ensure {
-    present, enabled, active, disabled, stopped: {
-      #everything should be installed
-
-    }#end configfiles should be present case
-    absent: {
-
-    }#end configfiles should be absent case
+  case $::osfamily {
+  #RedHat Debian Suse Solaris Windows
+    Debian, Solaris, Suse, Windows: {
+      notice "There is not currently a $module_name module for $::osfamily included for $::fqdn"
+    }
     default: {
-      notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
-    }#end default ensure case
-  }#end ensure case
+      case $ensure {
+        present, enabled, active, disabled, stopped: {
+        #everything should be installed
+
+        }#end configfiles should be present case
+        absent: {
+        }#end configfiles should be absent case
+        default: {
+          notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
+        }#end default ensure case
+      }#end ensure case
+    }#end default supported OS case
+  }#end osfamily case
 }#end class

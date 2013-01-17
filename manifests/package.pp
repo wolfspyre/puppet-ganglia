@@ -8,7 +8,7 @@ class ganglia::rhel::package {
   case $::osfamily {
   #RedHat Debian Suse Solaris Windows
     Debian, Solaris, Suse, Windows: {
-      notice "There is not currently a $::modulename module for $::osfamily included for $::fqdn"
+      notice "There is not currently a $module_name module for $::osfamily included for $::fqdn"
     }
     default: {
       case $ganglia::ensure {
