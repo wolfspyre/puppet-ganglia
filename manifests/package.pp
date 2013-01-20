@@ -1,7 +1,7 @@
-# == Class: ganglia::rhel::package
+# == Class: ganglia::package
 #  wrapper class
 #
-class ganglia::rhel::package {
+class ganglia::package {
   Package{} -> Anchor['ganglia::package::end']
   $packagename        = $ganglia::packagename
   # end of variables
