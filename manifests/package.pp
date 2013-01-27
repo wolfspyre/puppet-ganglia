@@ -3,7 +3,12 @@
 #
 class ganglia::package {
   Package{} -> Anchor['ganglia::package::end']
-  $packagename        = $ganglia::packagename
+  include ganglia
+  include ganglia::params
+  #make our variables local scope
+  $gmetad_package        = $ganglia::params::gmetad_package_name
+  $gmond_package         = $ganglia::params::gmond_package_name
+  $web_package           = $ganglia::params::web_package_name
   # end of variables
   case $::osfamily {
   #RedHat Debian Suse Solaris Windows
@@ -11,23 +16,60 @@ class ganglia::package {
       notice "There is not currently a $module_name module for $::osfamily included for $::fqdn"
     }
     default: {
-      case $ganglia::ensure {
+      #metadaemon
+      case $ganglia::gmetad {
         present, enabled, active, disabled, stopped: {
         #everything should be installed
-          package { $packagename:
+          package { $gmetad_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
         absent: {
         #everything should be removed
-          package { $packagename:
+          package { $gmetad_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
         }#end absent case
         default: {
           notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
         }#end default ensure case
-      }#end ensure case
+      }#end gmetad ensure case
+      #monitor
+      case $ganglia::gmond {
+        present, enabled, active, disabled, stopped: {
+        #everything should be installed
+          package { $gmond_package:
+            ensure => 'present',
+          } -> Anchor['ganglia::package::end']
+        }#end present case
+        absent: {
+        #everything should be removed
+          package { $gmond_package:
+            ensure => 'absent',
+          } -> Anchor['ganglia::package::end']
+        }#end absent case
+        default: {
+          notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
+        }#end default ensure case
+      }#end gmond ensure case
+      #web
+      case $ganglia::web {
+        present, enabled, active, disabled, stopped: {
+        #everything should be installed
+          package { $web_package:
+            ensure => 'present',
+          } -> Anchor['ganglia::package::end']
+        }#end present case
+        absent: {
+        #everything should be removed
+          package { $web_package:
+            ensure => 'absent',
+          } -> Anchor['ganglia::package::end']
+        }#end absent case
+        default: {
+          notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
+        }#end default ensure case
+      }#end web ensure case
     }#end supported OS default case
   }#end osfamily case
 }#end class
