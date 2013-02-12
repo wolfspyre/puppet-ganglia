@@ -1,7 +1,7 @@
 # == Class: ganglia::service
 #  wrapper class
 Anchor['ganglia::config::end'] -> Class['ganglia::service']
-class ganglia::service:: {
+class ganglia::service {
   Service{} -> Anchor['ganglia::service::end']
   $gmond_package       = $ganglia::params::gmond_package_name
   $gmetad_package       = $ganglia::params::gmetad_package_name
