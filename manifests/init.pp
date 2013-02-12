@@ -115,7 +115,7 @@
 #
 #
 class ganglia(
-  $ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' ),
+  $ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' )
   $ganglia::ensure                    = enabled,
   $ganglia::gmetad                    = hiera('ganglia::gmetad',             'false' ),
   $ganglia::gmetad_template           = hiera('ganglia::gmetad_template',    'ganglia/etc/ganglia/gmetad.conf.erb'),
