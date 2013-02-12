@@ -1,12 +1,20 @@
 class ganglia::params {
-  $gmond_package_name   = 'ganglia-gmond'
+  $gmond_package_name   = ['ganglia-gmond', 'ganglia-gmond-modules-python']
   $gmond_service_name   = 'gmond'
 
   $gmetad_package_name  = 'ganglia-gmetad'
   $gmetad_service_name  = 'gmetad'
 
   # paths are the same for el5.x & el6.x
-  $web_package_name     = 'ganglia-web'
+  case $ganglia::web_php53 {
+    true: {
+      $web_package_name     = 'ganglia-web-php53'
+    }
+    false: {
+      $web_package_name     = 'ganglia-web'
+    }
+    default: {fail("Expecting true or false for ganglia::web_php53, but got $ganglia::web_php53")}
+  }
   $web_php_config       = '/etc/ganglia/conf.php'
   $web_php_erb          = 'ganglia/conf.php.erb'
 

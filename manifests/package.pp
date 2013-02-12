@@ -19,13 +19,11 @@ class ganglia::package {
       #metadaemon
       case $ganglia::gmetad {
         present, enabled, active, disabled, stopped: {
-        #everything should be installed
           package { $gmetad_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
         absent: {
-        #everything should be removed
           package { $gmetad_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
@@ -33,17 +31,15 @@ class ganglia::package {
         default: {
           notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
         }#end default ensure case
-      }#end gmetad ensure case
+      }
       #monitor
       case $ganglia::gmond {
         present, enabled, active, disabled, stopped: {
-        #everything should be installed
           package { $gmond_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
         absent: {
-        #everything should be removed
           package { $gmond_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
@@ -51,17 +47,15 @@ class ganglia::package {
         default: {
           notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
         }#end default ensure case
-      }#end gmond ensure case
+      }
       #web
       case $ganglia::web {
         present, enabled, active, disabled, stopped: {
-        #everything should be installed
           package { $web_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
         absent: {
-        #everything should be removed
           package { $web_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
@@ -69,7 +63,7 @@ class ganglia::package {
         default: {
           notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
         }#end default ensure case
-      }#end web ensure case
+      }
     }#end supported OS default case
   }#end osfamily case
 }#end class
