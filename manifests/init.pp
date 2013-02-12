@@ -118,7 +118,7 @@ class ganglia(
   ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' ),
   ganglia::ensure                    = enabled,
   ganglia::gmetad                    = hiera('ganglia::gmetad',             'false' ),
-  ganglia::gmetad_template           = hiera('ganglia::gmetad_template',    'ganglia/etc/ganglia/gmetad.conf.erb')
+  ganglia::gmetad_template           = hiera('ganglia::gmetad_template',    'ganglia/etc/ganglia/gmetad.conf.erb'),
   ganglia::gmond                     = hiera('ganglia::gmond',              'true' ),
   ganglia::gmond_cluster_name        = hiera('ganglia::gmond_cluster_name', 'unspecified' ),
   ganglia::gmond_gexec_enable        = hiera('ganglia::gmond_gexec_enable', 'false' ),
