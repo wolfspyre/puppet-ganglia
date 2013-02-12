@@ -42,6 +42,9 @@
 # [*ganglia::web*]
 #   Whether or not this node is the web node
 #
+# [*ganglia::web_php53*]
+#   Whether or not to use php53 RPMs in rh/cent5
+#
 #  [*ganglia::gmond_udp_recv_channels*]
 #    A hash of configured recieve channels
 #
@@ -56,8 +59,10 @@
 #
 #ganglia::add_repo:           'false'
 #ganglia::gmetad:             'false'
+#ganglia::gmetad_template:    'ganglia/etc/ganglia/gmetad.conf.erb'
 #ganglia::gmond:              'true'
 #ganglia::gmond_cluster_name: 'unspecified'
+#ganglia::gmond_gexec_enable: 'false'
 #ganglia::gmond_latlong:      'unspecified'
 #ganglia::gmond_location:     'unspecified'
 #ganglia::gmond_owner:        'unspecified'
@@ -65,17 +70,20 @@
 # main: {
 #   port:       '8649'
 # }
+#ganglia::gmond_template:     'ganglia/etc/ganglia/gmond.conf.erb'
 #ganglia::gmond_udp_recv_channels:
 # main: {
-#   mcast_join: '239.2.11.71'
-#   port:       '8649'
-#   ttl:        '1'
+#   mcast_join: '239.2.11.71',
+#   bind:       '239.2.11.71',
+#   port:       '8649',
+#   retry_bind: true
 # }
 #ganglia::gmond_udp_send_channels:
 # main: {
-#   mcast_join: '239.2.11.71'
-#   port:       '8649'
-#   ttl:        '1'
+#   mcast_join:    '239.2.11.71',
+#   port:          '8649',
+#   bind_hostname: 'yes',
+#   ttl:           '1'
 # }
 #ganglia::gmond_url:          'unspecified'
 #ganglia::repo_hash:
@@ -88,7 +96,7 @@
 #ganglia::user:               'nobody'
 #ganglia::version:            '3.4'
 #ganglia::web:                'false'
-
+#ganglia::web_php53:          'true'
 #
 # === Examples
 #
@@ -108,9 +116,12 @@
 #
 class ganglia(
   ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' ),
+  ganglia::ensure                    = enabled,
   ganglia::gmetad                    = hiera('ganglia::gmetad',             'false' ),
+  ganglia::gmetad_template           = hiera('ganglia::gmetad_template',    'ganglia/etc/ganglia/gmetad.conf.erb')
   ganglia::gmond                     = hiera('ganglia::gmond',              'true' ),
   ganglia::gmond_cluster_name        = hiera('ganglia::gmond_cluster_name', 'unspecified' ),
+  ganglia::gmond_gexec_enable        = hiera('ganglia::gmond_gexec_enable', 'false' ),
   ganglia::gmond_latlong             = hiera('ganglia::gmond_latlong',      'unspecified' ),
   ganglia::gmond_location            = hiera('ganglia::gmond_location',     'unspecified' ),
   ganglia::gmond_owner               = hiera('ganglia::gmond_owner',        'unspecified' ),
@@ -118,17 +129,20 @@ class ganglia(
     main => {
       port => '8649',
     }),
+  ganglia::gmond_template            = hiera('ganglia::gmond_template',     'ganglia/etc/ganglia/gmond.conf.erb')
   ganglia::gmond_udp_recv_channels   = hiera('ganglia::gmond_udp_recv_channels',
     main => {
       mcast_join => '239.2.11.71',
       port       => '8649',
-      ttl        => '1',
+      bind       => '239.2.11.71',
+      retry_bind => true,
     } ),
   ganglia::gmond_udp_send_channels   = hiera('ganglia::gmond_udp_send_channels',
     main => {
-      mcast_join => '239.2.11.71',
-      port       => '8649',
-      ttl        => '1',
+      bind_hostname => 'yes',
+      mcast_join    => '239.2.11.71',
+      port          => '8649',
+      ttl           => '1',
     } ),
   ganglia::gmond_url                 = hiera('ganglia::gmond_url',          'www.mydomain.com')
   ganglia::repo_hash                 = hiera('ganglia::repo_hash',
@@ -141,6 +155,7 @@ class ganglia(
   ganglia::user                      = hiera('ganglia::user',               'nobody' ),
   ganglia::version                   = hiera('ganglia::version',            '3.4'),
   ganglia::web                       = hiera('ganglia::web',                'false' )
+  ganglia::web_php53                 = hiera('ganglia::web_php53',          'false')
 ) {
   #take advantage of the Anchor pattern
   anchor{'ganglia::begin':}
@@ -167,23 +182,45 @@ class ganglia(
   } else {
     $gmond = $ganglia::gmond
   }
+  if is_string($ganglia::gmond_gexec_enable) {
+    $gmond_gexec_enable = str2bool($ganglia::gmond_gexec_enable)
+  } else {
+    $gmond_gexec_enable = $ganglia::gmond_gexec_enable
+  }
   if is_string($ganglia::web) {
     $web = str2bool($ganglia::web)
   } else {
     $web = $ganglia::web
   }
+  if is_string($ganglia::web_php53) {
+    $web_php53 = str2bool($ganglia::web_php53)
+  } else {
+    $web_php53 = $ganglia::web_php53
+  }
+  $ensure                    = $ganglia::ensure
+  $gmetad_template           = $ganglia::gmetad_template
   $gmond_cluster_name        = $ganglia::gmond_cluster_name
   $gmond_latlong             = $ganglia::gmond_latlong
   $gmond_location            = $ganglia::gmond_location
   $gmond_owner               = $ganglia::gmond_owner
   $gmond_tcp_accept_channels = $ganglia::gmond_tcp_accept_channels
+  $gmond_template            = $ganglia::gmond_template
   $gmond_udp_recv_channels   = $ganglia::gmond_udp_recv_channels
   $gmond_udp_send_channels   = $ganglia::gmond_udp_send_channels
   $gmond_url                 = $ganglia::gmond_url
   $repo_hash                 = $ganglia::repo_hash
   $user                      = $ganglia::user
   $version                   = $ganglia::version
-
+  if $add_repo {
+    Yumrepo{
+        notify  => Exec['yum_clean_metadata'],
+        require => Anchor['dprepo::config::end'],
+        before  => Anchor['ganglia::package::begin'],
+      }
+    create_resources('yumrepo', $ganglia::repo_hash)
+    $ganglia_reponame = keys($ganglia::repo_hash)
+    ganglia::add_repo_file{ $ganglia::repo_hash: }
+  }
 }#end of ganglia class
 
 
