@@ -13,7 +13,7 @@ class ganglia::package {
   case $::osfamily {
   #RedHat Debian Suse Solaris Windows
     Debian, Solaris, Suse, Windows: {
-      notice "There is not currently a $module_name module for $::osfamily included for $::fqdn"
+      notice "There is not currently a ${module_name} module for ${::osfamily} included for ${::fqdn}"
     }
     default: {
       #metadaemon

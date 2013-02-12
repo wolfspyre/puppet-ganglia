@@ -1,9 +1,7 @@
 # == Class: ganglia::rhel::config
-#  wrapper class
-#
-#
-Anchor['ganglia::package::end'] -> Class['ganglia::rhel::config']
-class ganglia::rhel::config {
+Anchor['ganglia::package::end'] -> Class['ganglia::config::rhel']
+# This class contains rhel specific needs
+class ganglia::config::rhel {
   #make our parameters local scope
   File{} -> Anchor['ganglia::config::end']
   #clean up our parameters

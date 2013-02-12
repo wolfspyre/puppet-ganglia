@@ -115,47 +115,47 @@
 #
 #
 class ganglia(
-  ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' ),
-  ganglia::ensure                    = enabled,
-  ganglia::gmetad                    = hiera('ganglia::gmetad',             'false' ),
-  ganglia::gmetad_template           = hiera('ganglia::gmetad_template',    'ganglia/etc/ganglia/gmetad.conf.erb'),
-  ganglia::gmond                     = hiera('ganglia::gmond',              'true' ),
-  ganglia::gmond_cluster_name        = hiera('ganglia::gmond_cluster_name', 'unspecified' ),
-  ganglia::gmond_gexec_enable        = hiera('ganglia::gmond_gexec_enable', 'false' ),
-  ganglia::gmond_latlong             = hiera('ganglia::gmond_latlong',      'unspecified' ),
-  ganglia::gmond_location            = hiera('ganglia::gmond_location',     'unspecified' ),
-  ganglia::gmond_owner               = hiera('ganglia::gmond_owner',        'unspecified' ),
-  ganglia::gmond_tcp_accept_channels = hiera('ganglia::gmond_tcp_accept_channels',
+  $ganglia::add_repo                  = hiera('ganglia::add_repo',           'false' ),
+  $ganglia::ensure                    = enabled,
+  $ganglia::gmetad                    = hiera('ganglia::gmetad',             'false' ),
+  $ganglia::gmetad_template           = hiera('ganglia::gmetad_template',    'ganglia/etc/ganglia/gmetad.conf.erb'),
+  $ganglia::gmond                     = hiera('ganglia::gmond',              'true' ),
+  $ganglia::gmond_cluster_name        = hiera('ganglia::gmond_cluster_name', 'unspecified' ),
+  $ganglia::gmond_gexec_enable        = hiera('ganglia::gmond_gexec_enable', 'false' ),
+  $ganglia::gmond_latlong             = hiera('ganglia::gmond_latlong',      'unspecified' ),
+  $ganglia::gmond_location            = hiera('ganglia::gmond_location',     'unspecified' ),
+  $ganglia::gmond_owner               = hiera('ganglia::gmond_owner',        'unspecified' ),
+  $ganglia::gmond_tcp_accept_channels = hiera('ganglia::gmond_tcp_accept_channels',
     main => {
-      port => '8649',
+      port => '8649'
     }),
-  ganglia::gmond_template            = hiera('ganglia::gmond_template',     'ganglia/etc/ganglia/gmond.conf.erb')
-  ganglia::gmond_udp_recv_channels   = hiera('ganglia::gmond_udp_recv_channels',
+  $ganglia::gmond_template            = hiera('ganglia::gmond_template',     'ganglia/etc/ganglia/gmond.conf.erb'),
+  $ganglia::gmond_udp_recv_channels   = hiera('ganglia::gmond_udp_recv_channels',
     main => {
       mcast_join => '239.2.11.71',
       port       => '8649',
       bind       => '239.2.11.71',
-      retry_bind => true,
+      retry_bind => true
     } ),
-  ganglia::gmond_udp_send_channels   = hiera('ganglia::gmond_udp_send_channels',
+  $ganglia::gmond_udp_send_channels   = hiera('ganglia::gmond_udp_send_channels',
     main => {
       bind_hostname => 'yes',
       mcast_join    => '239.2.11.71',
       port          => '8649',
       ttl           => '1',
     } ),
-  ganglia::gmond_url                 = hiera('ganglia::gmond_url',          'www.mydomain.com')
-  ganglia::repo_hash                 = hiera('ganglia::repo_hash',
+  $ganglia::gmond_url                 = hiera('ganglia::gmond_url',          'www.mydomain.com'),
+  $ganglia::repo_hash                 = hiera('ganglia::repo_hash',
     ganglia_34 => {
       descr     => 'ganglia_34',
       baseurl   => 'http://repo.mydomain.com/ganglia/3.4/',
       gpgcheck  => '0',
       enabled   => '1',
     }),
-  ganglia::user                      = hiera('ganglia::user',               'nobody' ),
-  ganglia::version                   = hiera('ganglia::version',            '3.4'),
-  ganglia::web                       = hiera('ganglia::web',                'false' )
-  ganglia::web_php53                 = hiera('ganglia::web_php53',          'false')
+  $ganglia::user                      = hiera('ganglia::user',               'nobody' ),
+  $ganglia::version                   = hiera('ganglia::version',            '3.4'),
+  $ganglia::web                       = hiera('ganglia::web',                'false' ),
+  $ganglia::web_php53                 = hiera('ganglia::web_php53',          'false')
 ) {
   #take advantage of the Anchor pattern
   anchor{'ganglia::begin':}

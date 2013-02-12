@@ -1,8 +1,5 @@
-# == Class: ganglia::config
-#  wrapper class
-#
-#
 Anchor['ganglia::package::end'] -> Class['ganglia::config']
+# == Class: ganglia::config
 class ganglia::config {
   #make our parameters local scope
   File{
@@ -29,7 +26,7 @@ class ganglia::config {
   case $::osfamily {
   #RedHat Debian Suse Solaris Windows
     Debian, Solaris, Suse, Windows: {
-      notice "There is not currently a $module_name module for $::osfamily included for $::fqdn"
+      notice "There is not currently a ${module_name} module for ${::osfamily} included for ${::fqdn}"
     }
     default: {
       file { $ganglia_dirs:

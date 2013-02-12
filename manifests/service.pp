@@ -1,6 +1,5 @@
-# == Class: ganglia::service
-#  wrapper class
 Anchor['ganglia::config::end'] -> Class['ganglia::service']
+# == Class: ganglia::service
 class ganglia::service {
   Service{} -> Anchor['ganglia::service::end']
   $gmond_package       = $ganglia::params::gmond_package_name
@@ -11,7 +10,7 @@ class ganglia::service {
   case $::osfamily {
   #RedHat Debian Suse Solaris Windows
     Debian, Solaris, Suse, Windows: {
-      notice "There is not currently a $module_name module for $::osfamily included for $::fqdn"
+      notice "There is not currently a ${module_name} module for ${::osfamily} included for ${::fqdn}"
     }
     default: {
       case $ganglia::ensure {

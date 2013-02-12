@@ -1,3 +1,4 @@
+#This class contains parameters not sourced elsewhere
 class ganglia::params {
   $gmond_package_name   = ['ganglia-gmond', 'ganglia-gmond-modules-python']
   $gmond_service_name   = 'gmond'
@@ -13,7 +14,7 @@ class ganglia::params {
     false: {
       $web_package_name     = 'ganglia-web'
     }
-    default: {fail("Expecting true or false for ganglia::web_php53, but got $ganglia::web_php53")}
+    default: {fail("Expecting true or false for ganglia::web_php53, but got ${ganglia::web_php53}")}
   }
   $web_php_config       = '/etc/ganglia/conf.php'
   $web_php_erb          = 'ganglia/conf.php.erb'

@@ -1,6 +1,6 @@
 # == Class: ganglia::rhel::service
-#  wrapper class
 Anchor['ganglia::config::end'] -> Class['ganglia::service::rhel']
+#  This class contains rhel specific service needs
 class ganglia::service::rhel {
   Service{} -> Anchor['ganglia::service::end']
   $packagename        = $ganglia::packagename
