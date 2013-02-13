@@ -21,15 +21,15 @@ class ganglia::params {
 
   case $ganglia::version {
     3.4: {
-      $gmond_service_config  = '/etc/gmond.conf'
+      $gmond_service_config  = '/etc/ganglia/gmond.conf'
       $gmond_service_erb     = 'ganglia/gmond.conf.3.4.erb'
-      $gmetad_service_config = '/etc/gmetad.conf'
+      $gmetad_service_config = '/etc/ganglia/gmetad.conf'
       $gmetad_service_erb    = 'ganglia/gmetad.conf.3.4.erb'
     }
     3.5: {
-      $gmond_service_config  = '/etc/gmond.conf'
+      $gmond_service_config  = '/etc/ganglia/gmond.conf'
       $gmond_service_erb     = 'ganglia/gmond.conf.3.5.erb'
-      $gmetad_service_config = '/etc/gmetad.conf'
+      $gmetad_service_config = '/etc/ganglia/gmetad.conf'
       $gmetad_service_erb    = 'ganglia/gmetad.conf.3.5.erb'
     }
     default: {

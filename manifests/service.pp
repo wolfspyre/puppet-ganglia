@@ -30,7 +30,7 @@ class ganglia::service {
         service {'gmond':
           ensure    => $ensure,
           enable    => $enable,
-          subscribe => File['$gmond_config'],
+          subscribe => File[$gmond_config],
           require   => Package[$gmond_package],
           hasstatus => true,
         }#end service definition
@@ -39,7 +39,7 @@ class ganglia::service {
         service {'gmetad':
           ensure    => $ensure,
           enable    => $enable,
-          subscribe => File['$gmetad_config'],
+          subscribe => File[$gmetad_config],
           require   => Package[$gmetad_package],
           hasstatus => true,
         }#end service definition
