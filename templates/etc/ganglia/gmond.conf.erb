@@ -69,7 +69,7 @@ udp_recv_channel {
   <% end %>
 }
 <%end%>
-<% tcp_accept_channel.each_pair do |key, hash| -%>
+<% tcp_accept_channels.each_pair do |key, hash| -%>
 tcp_accept_channel {
   #<%=key%>
   port = <%= hash['port'] %>
