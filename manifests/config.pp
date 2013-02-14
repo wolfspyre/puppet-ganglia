@@ -2,13 +2,16 @@ Anchor['ganglia::package::end'] -> Class['ganglia::config']
 # == Class: ganglia::config
 class ganglia::config {
   #make our parameters local scope
+  $gmetad_data_source = $ganglia::gmetad_data_source
+  #set variables
+  $ganglia_dirs       = ['/etc/ganglia', '/etc/ganglia/conf.d']
+  #set defaults
   File{
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
     before => Anchor['ganglia::config::end'],
   }
-  $ganglia_dirs = ['/etc/ganglia', '/etc/ganglia/conf.d']
   #clean up our parameters
   case $ganglia::ensure {
     enabled, active: {

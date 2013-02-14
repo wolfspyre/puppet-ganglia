@@ -12,30 +12,29 @@ user                = scope.lookupvar('ganglia::user')
 -%>
 /* This file generated for <%=fqdn %> by puppet. Manual changes will be reverted */
 globals {
-  daemonize = yes
-  setuid = yes
-  user = <%=user%>
-  debug_level = 0
-  max_udp_msg_len = 1472
-  mute = no
-  deaf = no
-  allow_extra_data = yes
-  host_dmax = 86400 /*secs. Expires (removes from web interface) hosts in 1 day */
-  host_tmax = 20 /*secs */
-  cleanup_threshold = 300 /*secs */
+  allow_extra_data       = yes
+  cleanup_threshold      = 300 /*secs */
+  daemonize              = yes
+  deaf                   = no
+  debug_level            = 0
 <% if gexec_enable -%>
-  gexec = yes
+  gexec                  = yes
 <%else -%>
-  gexec = no
+  gexec                  = no
 <%end-%>
+  host_dmax              = 86400 /*secs. Expires (removes from web interface) hosts in 1 day */
+  host_tmax              = 20 /*secs */
+  max_udp_msg_len        = 1472
+  mute                   = no
   send_metadata_interval = 0 /*secs */
+  setuid                 = yes
+  user                   = <%=user%>
 }
 
 cluster {
-  name = "<%=cluster_name-%>"
-  owner = "<%= owner -%>"
-  latlong = "<%= latlong -%>"
-  url = "<%= url -%>"
+  name    = "<%=cluster_name-%>"
+  owner   = "<%= owner -%>"
+  url     = "<%= url -%>"
 }
 
 host {
@@ -43,13 +42,14 @@ host {
 }
 
 <% udp_send_channels.each_pair do |key, hash| -%>
-udp_send_channel {
   #<%=key%>
-  <%if hash['bind_hostname'] == 'yes' -%>
+udp_send_channel {
+
+<%if hash['bind_hostname'] == 'yes' -%>
   bind_hostname = yes
-  <%else -%>
+<%else -%>
   bind_hostname = no
-  <%end-%>
+<%end-%>
   mcast_join = <%= hash['mcast_join'] %>
   port = <%= hash['port'] %>
   ttl = <%= hash['ttl'] %>

@@ -18,50 +18,50 @@ class ganglia::package {
     default: {
       #metadaemon
       case $ganglia::gmetad {
-        present, enabled, active, disabled, stopped: {
+        present, enabled, active, disabled, stopped, true: {
           package { $gmetad_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
-        absent: {
+        absent, false: {
           package { $gmetad_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
         }#end absent case
         default: {
-          notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
+          notice "ganglia::gmetad has an unsupported value of ${ganglia::gmetad}."
         }#end default ensure case
       }
       #monitor
       case $ganglia::gmond {
-        present, enabled, active, disabled, stopped: {
+        present, enabled, active, disabled, stopped, true: {
           package { $gmond_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
-        absent: {
+        absent, false: {
           package { $gmond_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
         }#end absent case
         default: {
-          notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
+          notice "ganglia::gmond has an unsupported value of ${ganglia::gmond}."
         }#end default ensure case
       }
       #web
       case $ganglia::web {
-        present, enabled, active, disabled, stopped: {
+        present, enabled, active, disabled, stopped, true: {
           package { $web_package:
             ensure => 'present',
           } -> Anchor['ganglia::package::end']
         }#end present case
-        absent: {
+        absent, false: {
           package { $web_package:
             ensure => 'absent',
           } -> Anchor['ganglia::package::end']
         }#end absent case
         default: {
-          notice "ganglia::ensure has an unsupported value of ${ganglia::ensure}."
+          notice "ganglia::web has an unsupported value of ${ganglia::web}."
         }#end default ensure case
       }
     }#end supported OS default case
