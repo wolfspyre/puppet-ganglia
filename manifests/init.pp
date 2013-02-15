@@ -247,7 +247,7 @@ class ganglia(
   include ganglia::config
   #take advantage of the Anchor pattern
   anchor{'ganglia::begin':
-    before => Class['ganglia::paclage'],
+    before => Class['ganglia::packge'],
   }
   Class['ganglia::package'] -> Class['ganglia::config']
   Class['ganglia::package'] -> Class['ganglia::service']
