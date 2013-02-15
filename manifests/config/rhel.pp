@@ -1,9 +1,8 @@
 # == Class: ganglia::rhel::config
-Anchor['ganglia::package::end'] -> Class['ganglia::config::rhel']
 # This class contains rhel specific needs
 class ganglia::config::rhel {
   #make our parameters local scope
-  File{} -> Anchor['ganglia::config::end']
+  File{}
   #clean up our parameters
   $ensure             = $ganglia::ensure
   case $ensure {

@@ -2,7 +2,6 @@
 #  wrapper class
 #
 class ganglia::package {
-  Package{} -> Anchor['ganglia::package::end']
   include ganglia
   include ganglia::params
   #make our variables local scope
@@ -21,12 +20,12 @@ class ganglia::package {
         present, enabled, active, disabled, stopped, true: {
           package { $gmetad_package:
             ensure => 'present',
-          } -> Anchor['ganglia::package::end']
+          }
         }#end present case
         absent, false: {
           package { $gmetad_package:
             ensure => 'absent',
-          } -> Anchor['ganglia::package::end']
+          }
         }#end absent case
         default: {
           notice "ganglia::gmetad has an unsupported value of ${ganglia::gmetad}."
@@ -37,12 +36,12 @@ class ganglia::package {
         present, enabled, active, disabled, stopped, true: {
           package { $gmond_package:
             ensure => 'present',
-          } -> Anchor['ganglia::package::end']
+          }
         }#end present case
         absent, false: {
           package { $gmond_package:
             ensure => 'absent',
-          } -> Anchor['ganglia::package::end']
+          }
         }#end absent case
         default: {
           notice "ganglia::gmond has an unsupported value of ${ganglia::gmond}."
@@ -53,12 +52,12 @@ class ganglia::package {
         present, enabled, active, disabled, stopped, true: {
           package { $web_package:
             ensure => 'present',
-          } -> Anchor['ganglia::package::end']
+          }
         }#end present case
         absent, false: {
           package { $web_package:
             ensure => 'absent',
-          } -> Anchor['ganglia::package::end']
+          }
         }#end absent case
         default: {
           notice "ganglia::web has an unsupported value of ${ganglia::web}."

@@ -189,15 +189,24 @@ class ganglia(
   $ganglia_web                       = hiera('ganglia::web',                  'false' ),
   $ganglia_web_php53                 = hiera('ganglia::web_php53',            'false')
 ) {
+  include ganglia::package
+  include ganglia::service
+  include ganglia::config
   #take advantage of the Anchor pattern
-  anchor{'ganglia::begin':}
-  -> anchor {'ganglia::package::begin':}
-  -> anchor {'ganglia::package::end':}
-  -> anchor {'ganglia::config::begin':}
-  -> anchor {'ganglia::config::end':}
-  -> anchor {'ganglia::service::begin':}
-  -> anchor {'ganglia::service::end':}
-  -> anchor {'ganglia::end':}
+  anchor{'ganglia::begin':
+    before => Class['ganglia::paclage'],
+  }
+  Class['ganglia::package'] -> Class['ganglia::config']
+  Class['ganglia::package'] -> Class['ganglia::service']
+  Class['ganglia::config']  -> Class['ganglia::service']
+
+  anchor {'ganglia::end':
+    require => [
+      Class['ganglia::package'],
+      Class['ganglia::config'],
+      Class['ganglia::service'],
+    ],
+  }
   #clean up our parameters
   if is_string($ganglia_dd_repo) {
     $add_repo = str2bool($ganglia_add_repo)
@@ -261,9 +270,6 @@ class ganglia(
     $ganglia_reponame = keys($ganglia_repo_hash)
     ganglia::add_repo_file{ $ganglia_reponame: }
   }
-  include ganglia::config
-  include ganglia::package
-  include ganglia::service
 }#end of ganglia class
 
 

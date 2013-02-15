@@ -1,4 +1,3 @@
-Anchor['ganglia::package::end'] -> Class['ganglia::config']
 # == Class: ganglia::config
 class ganglia::config {
   #make our parameters local scope
@@ -10,7 +9,6 @@ class ganglia::config {
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
-    before => Anchor['ganglia::config::end'],
   }
   #clean up our parameters
   case $ganglia::ensure {
