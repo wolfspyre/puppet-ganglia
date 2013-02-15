@@ -263,8 +263,7 @@ class ganglia(
   if $add_repo {
     Yumrepo{
         notify  => Exec['yum_clean_metadata'],
-        require => Anchor['dprepo::config::end'],
-        before  => Anchor['ganglia::package::begin'],
+        before  => Class['ganglia::package'],
       }
     create_resources('yumrepo', $ganglia_repo_hash)
     $ganglia_reponame = keys($ganglia_repo_hash)
