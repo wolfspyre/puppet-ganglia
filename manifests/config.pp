@@ -47,7 +47,18 @@ class ganglia::config {
         }
       }
       if $ganglia::web {
-        file {'/var/www/html/ganglia/conf.php':
+        case $ganglia::version {
+          3.4: {
+            $web_dir = '/var/www/html/gweb'
+          }
+          3.5: {
+            $web_dir = '/var/www/html/ganglia'
+          }
+          default: {
+            $web_dir = '/var/www/html/ganglia'
+          }
+        }
+        file {"${web_dir}/conf.php":
           ensure  => $fileensure,
           content => template($ganglia::web_template),
         }
