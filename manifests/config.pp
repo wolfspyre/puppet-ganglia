@@ -58,9 +58,10 @@ class ganglia::config {
             $web_dir = '/var/www/html/ganglia'
           }
         }
-        file {"${web_dir}/conf.php":
+        file {'ganglia_web_config':
           ensure  => $fileensure,
           content => template($ganglia::web_template),
+          path    => "${web_dir}/conf.php",
         }
       }
 
