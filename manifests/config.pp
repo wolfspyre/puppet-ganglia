@@ -46,6 +46,12 @@ class ganglia::config {
           content => template($ganglia::gmetad_template),
         }
       }
+      if $ganglia::web {
+        file {'/var/www/html/ganglia/conf.php':
+          ensure  => $fileensure,
+          content => template($ganglia::web_template),
+        }
+      }
 
     }#end default supported OS case
   }#end osfamily case

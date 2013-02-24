@@ -106,6 +106,7 @@
 #ganglia::version:              '3.4'
 #ganglia::web:                  'false'
 #ganglia::web_php53:            'true'
+#ganglia::web_template:         'ganglia/var/www/html/ganglia/conf.php.erb'
 #
 # === Examples
 #
@@ -134,6 +135,7 @@
 #  carbon_port
 #  graphite_prefix
 #  carbon_timeout
+#gweb conf.php parameterization.
 #
 # === Authors
 #
@@ -187,7 +189,8 @@ class ganglia(
   $ganglia_user                      = hiera('ganglia::user',                 'nobody' ),
   $ganglia_version                   = hiera('ganglia::version',              '3.4'),
   $ganglia_web                       = hiera('ganglia::web',                  'false' ),
-  $ganglia_web_php53                 = hiera('ganglia::web_php53',            'false')
+  $ganglia_web_php53                 = hiera('ganglia::web_php53',            'false'),
+  $ganglia_web_template              = hiera('ganglia::web_template',         'ganglia/var/www/html/ganglia/conf.php.erb'),
 ) {
   #clean up our parameters
   if is_string($ganglia_dd_repo) {
@@ -242,6 +245,7 @@ class ganglia(
   $repo_hash                 = $ganglia_repo_hash
   $user                      = $ganglia_user
   $version                   = $ganglia_version
+  $web_template              = $ganglia_web_template
   include ganglia::package
   include ganglia::service
   include ganglia::config
