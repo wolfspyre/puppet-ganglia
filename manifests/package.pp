@@ -52,11 +52,13 @@ class ganglia::package {
         present, enabled, active, disabled, stopped, true: {
           package { $web_package:
             ensure => 'present',
+            alias  => 'ganglia-web',
           }
         }#end present case
         absent, false: {
           package { $web_package:
             ensure => 'absent',
+            alias  => 'ganglia-web',
           }
         }#end absent case
         default: {
