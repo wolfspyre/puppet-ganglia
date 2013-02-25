@@ -137,6 +137,8 @@
 #  carbon_timeout
 #gweb conf.php parameterization.
 #
+#gmond extra conf.d module configuration and enablement via puppet
+#
 # === Authors
 #
 # Wolf Noble <wolfspyre@wolfspaw.com>
