@@ -63,7 +63,7 @@ udp_recv_channel {
   mcast_join = <%= hash['mcast_join'] %>
   port = <%= hash['port'] %>
   bind = <%= hash['bind'] %>
-  <% if hash['retry_bind'] -%>
+<% if hash['retry_bind'] -%>
   retry_bind = true
 <% else -%>
   retry_bind = false
