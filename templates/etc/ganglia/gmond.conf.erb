@@ -35,6 +35,7 @@ cluster {
   name    = "<%=cluster_name-%>"
   owner   = "<%= owner -%>"
   url     = "<%= url -%>"
+  latlong = "<%= latlong %>"
 }
 
 host {
@@ -42,7 +43,7 @@ host {
 }
 
 <% udp_send_channels.each_pair do |key, hash| -%>
-  #<%=key%>
+#<%=key%>
 udp_send_channel {
 
 <%if hash['bind_hostname'] == 'yes' -%>
@@ -58,13 +59,13 @@ udp_send_channel {
 
 <% udp_recv_channels.each_pair do |key, hash| -%>
 udp_recv_channel {
-  #<%=key%>
+#<%=key%>
   mcast_join = <%= hash['mcast_join'] %>
   port = <%= hash['port'] %>
   bind = <%= hash['bind'] %>
   <% if hash['retry_bind'] -%>
   retry_bind = true
-  <% else -%>
+<% else -%>
   retry_bind = false
   <% end %>
 }
