@@ -4,7 +4,7 @@ source 'UNKNOWN'
 author 'wolfspyre'
 license 'Custom'
 summary 'cluster monitoring'
-description 'see ganglia.sourceforge.net for details of the software'
+description 'see ganglia.sourceforge.net for details of the software. RPMs available on github'
 project_page 'ganglia.sourceforge.net'
 
 ## Add dependencies, if any:

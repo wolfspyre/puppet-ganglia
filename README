@@ -8,10 +8,10 @@ BSD
 
 Contact
 -------
-Mumble/Murmur: http://ganglia.info/?page_id=68
+Ganglia: http://ganglia.info/?page_id=68
 
 Puppet Module: Wolf Noble wolfspyre@wolfspaw.com
-
+RPMs have been generated and placed [on github](https://github.com/wolfspyre/puppet-ganglia/tree/master/files/RPMs)
 Support
 -------
 
