@@ -6,7 +6,9 @@
 #
 # === Parameters
 #
-#
+# TODO:
+# in the web setup, setsebool -P httpd_can_network_connect true
+# must be set on systems with selinux
 # [*ganglia::add_repo*]
 #
 #
